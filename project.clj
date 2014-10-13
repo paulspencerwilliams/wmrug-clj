@@ -6,7 +6,8 @@
                  [compojure "1.1.9"]
                  [org.clojure/java.jdbc "0.3.5"]
                  [postgresql/postgresql "8.4-702.jdbc4"]
-                 [clj-time "0.8.0"]]
+                 [clj-time "0.8.0"]
+                 [korma "0.4.0"]]
   :plugins [[lein-ring "0.8.12"]]
   :ring {:handler wmrug-clj.handler/app}
   :profiles

@@ -1,19 +1,20 @@
 (ns wmrug-clj.models.task
-  (:require [clojure.java.jdbc :as sql]
-            [clj-time.format :as f]
-            [clj-time.coerce :as c]))
+  (:require [clj-time.format :as f]
+            [clj-time.coerce :as c])
+  (:use [korma.db]
+        [korma.core]))
 
 
-(def psql {:subprotocol "postgresql"
-           :subname "//localhost:5432/tasks"
-           :user "tasks_user"
-           :password "itsasecret"})
 
-(defn all []
-  (sql/query psql ["select * from tasks order by due asc"]))
+(defdb psql (postgres {:db "tasks"
+                       :username "tasks_user"
+                       :password "itsasecret"}))
+
+(defentity tasks)
+
+(defn all [] (select tasks (fields :title :due)(order :due :ASC)))
 
 (defn create [title due]
-  (sql/insert! psql 
-               :tasks 
-               [:title :due] 
-               [title (c/to-sql-time (f/parse (f/formatters :date) due))]))
+  (insert tasks 
+          (values {:title title 
+                   :due (c/to-sql-time (f/parse (f/formatters :date) due))})))
